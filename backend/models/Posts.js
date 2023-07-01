@@ -21,6 +21,19 @@ const postSchema = new mongoose.Schema(
       },
     ],
 
+    votes: {
+      upVotes: {
+        type: Number,
+        default: 0,
+        required: true,
+      },
+      downVotes: {
+        type: Number,
+        default: 0,
+        required: true,
+      },
+    },
+
     createdAt: {
       type: Date,
       default: Date.now(),

@@ -75,7 +75,7 @@ const getSinglePost = async (req, res, next) => {
 };
 
 const deletePost = async (req, res, next) => {
-  console.log(req);
+  console.log(req.user);
   try {
     const post = await Posts.findOneAndDelete({
       _id: req.params.id,
@@ -101,7 +101,37 @@ const deletePost = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ error });
+  }
+};
+
+const updateVotes = async (req, res, next) => {
+  // console.log(req.body);
+  try {
+    const post = await Posts.findById(req.params.id);
+    if (!post) {
+      throw new ApiError(
+        httpStatus.NOT_FOUND,
+        "Post not found with matching Id"
+      );
+    }
+
+    if (req.body.change == "increase") {
+      if (req.body.vote == "downVote") {
+        post.votes.downVotes += 1;
+      } else if (req.body.vote == "upVote") {
+        post.votes.upVotes += 1;
+      }
+    } else {
+      if (req.body.vote == "downVote") {
+        post.votes.downVotes -= 1;
+      } else if (req.body.vote == "upVote") {
+        post.votes.upVotes -= 1;
+      }
+    }
+    await post.save();
+    res.status(201).json({ post });
+  } catch (error) {
     res.status(500).json({ error });
   }
 };
@@ -111,4 +141,5 @@ module.exports = {
   getAllPost,
   getSinglePost,
   deletePost,
+  updateVotes,
 };
