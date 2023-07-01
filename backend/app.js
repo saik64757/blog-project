@@ -7,19 +7,26 @@ const connectDB = require("./utils/db");
 const path = require("path");
 require("dotenv").config();
 const userRoutes = require("./routes/user.routes");
+const postsRoutes = require("./routes/posts.routes");
+const commentRoutes = require("./routes/comment.routes");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-const corsOption = {
-  credentials: true,
-  origin: [process.env.FRONT_URL],
-};
+// const corsOption = {
+//   credentials: true,
+//   origin: [process.env.FRONT_URL],
+// };
 // aplly middewares
-
-app.use(cors(corsOption));
 app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+app.use(express.json());
+
+app.use(cors());
+
+app.options("*", cors());
+
+// app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,6 +34,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/posts", postsRoutes);
+app.use("/api/v1/comments", commentRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

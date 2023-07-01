@@ -1,6 +1,28 @@
 const User = require("../models/User");
 const generateToken = require("../utils/jwt");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+
+// const signUp = async (req, res, next) => {
+//   try {
+//     const { username, email, password } = req.body;
+
+//     if (!username || !email || !password) {
+//       return res.status(400).json("All fields are required");
+//     }
+
+//     let user = await User.findOne({ email }).exec();
+
+//     user = new User({ username, email, password });
+//     console.log(user);
+
+//     user = await user.save();
+
+//     res.status(201).json({ user });
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// };
+
 const signUp = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -11,9 +33,13 @@ const signUp = async (req, res, next) => {
 
     let user = await User.findOne({ email }).exec();
 
+    if (user) {
+      return res.status(400).json("User with this email already exists");
+    }
+
     user = new User({ username, email, password });
 
-    user = await user.save();
+    await user.save();
 
     res.status(201).json({ user });
   } catch (error) {
@@ -48,7 +74,6 @@ const login = async (req, res, next) => {
 
     res.status(200).json({ user, token });
   } catch (error) {
-    
     res.status(500).json(error);
   }
 };
