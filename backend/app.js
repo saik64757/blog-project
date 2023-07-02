@@ -15,8 +15,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
  const corsOption = {
-   credentials: true,
-   origin: [process.env.FRONT_URL],
+   credentials: true
  };
 
 app.use(helmet());
