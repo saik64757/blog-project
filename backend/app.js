@@ -10,22 +10,21 @@ require("dotenv").config();
 const userRoutes = require("./routes/user.routes");
 const postsRoutes = require("./routes/posts.routes");
 const commentRoutes = require("./routes/comment.routes");
+const compression = require("compression");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+app.options("*", cors());
 
-// const corsOption = {
-//   credentials: true,
-//   origin: [process.env.FRONT_URL],
-// };
-// aplly middewares
 app.use(helmet());
 
 app.use(express.json());
 
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
-// app.options("*", cors());
+app.use(compression());
+
+app.use(cors());
 
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cookieParser());
@@ -49,6 +48,16 @@ app.use("*", (req, res, next) => {
   const error = new Error("Not found");
   error.status = 404;
   next(error);
+});
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
 });
 
 app.use(async (err, req, res, next) => {
