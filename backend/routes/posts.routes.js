@@ -2,7 +2,6 @@ const express = require("express");
 const {
   createPost,
   getAllPost,
-  getSinglePost,
   deletePost,
   updateVotes,
 } = require("../controllers/posts.controller");
@@ -12,7 +11,6 @@ const router = express.Router();
 
 router.post("/", auth, createPost);
 router.get("/", getAllPost);
-router.get("/:id", auth, getSinglePost);
 router.delete("/:id", auth, deletePost);
 router.patch("/votes/:id", auth, updateVotes);
 
