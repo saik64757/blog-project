@@ -14,18 +14,16 @@ const commentRoutes = require("./routes/comment.routes");
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-// const corsOption = {
-//   credentials: true,
-//   origin: [process.env.FRONT_URL],
-// };
-// aplly middewares
+ const corsOption = {
+   credentials: true,
+   origin: [process.env.FRONT_URL],
+ };
+
 app.use(helmet());
 
 app.use(express.json());
 
-app.use(cors());
-
-// app.options("*", cors());
+app.use(cors(corsOption));
 
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cookieParser());
