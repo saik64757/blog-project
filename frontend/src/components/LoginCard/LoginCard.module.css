@@ -1,0 +1,10 @@
+.loginWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.logindetails {
+  width: 500px;
+  height: auto;
+}
