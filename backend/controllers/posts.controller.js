@@ -52,28 +52,6 @@ const getAllPost = async (req, res, next) => {
   }
 };
 
-const getSinglePost = async (req, res, next) => {
-  try {
-    const post = await Posts.findById(req.params.id)
-      .populate("user", "username email")
-      .populate({
-        path: "comments",
-        populate: {
-          path: "user",
-          select: "-password",
-        },
-      });
-
-    if (!post) {
-      return res.status(404).json("Posts not found with thsi id");
-    }
-
-    res.status(200).json({ post });
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-};
-
 const deletePost = async (req, res, next) => {
   console.log(req.user);
   try {
@@ -139,7 +117,6 @@ const updateVotes = async (req, res, next) => {
 module.exports = {
   createPost,
   getAllPost,
-  getSinglePost,
   deletePost,
   updateVotes,
 };
